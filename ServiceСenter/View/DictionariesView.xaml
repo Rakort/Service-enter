@@ -1,0 +1,325 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:ServiceСenter.ViewModel" xmlns:model="clr-namespace:ServiceСenter.Model"
+    xmlns:commands="clr-namespace:ServiceСenter.Commands"
+    x:Class="ServiceСenter.View.DictionariesView" 
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <model:IdToTypeDeviceConverter x:Key="IdToTypeDeviceConverter"/>
+        <model:IdToFabricatorConverter x:Key="IdToFabricatorConverter"/>
+        <model:SelectedIndexToBoolConverter x:Key="SelectedIndexToBoolConverter"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <viewModel:DictionariesViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Padding="10">
+            <StackPanel>
+
+                <StackPanel x:Name="spTypeDevice">
+                    <Label FontSize="15" Content="Тип устройства"/>
+                    <Label Foreground="Gray" Content="Справочник типов устройств и товаров"/>
+                    <DataGrid x:Name="DgTypeDevice" ItemsSource="{Binding TypesDevicesEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single" CanUserDeleteRows="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Type}" ClipboardContentBinding="{x:Null}" Width="*" Header="Тип устройства" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddTypeDevices}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить тип устройства" Command="{Binding AddTypeDevices}" CommandParameter="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button IsEnabled="{Binding SelectedIndex, Converter={StaticResource SelectedIndexToBoolConverter}, ElementName=DgTypeDevice}" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0" Command="{Binding AddTypeDevices}"  CommandParameter="true">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock Text="Редактировать"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Background="Transparent" BorderBrush="{x:Null}" Command="{Binding DeleteTypeDevices}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spFabricator">
+                    <Label FontSize="15" Content="Производители"/>
+                    <Label Foreground="Gray" Content="Справочник производителей"/>
+                    <DataGrid Name="DgFabricator" ItemsSource="{Binding FabricatorEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Fabricator}" ClipboardContentBinding="{x:Null}" Width="*" Header="Производитель" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddFabricator}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить производителя" Command="{Binding AddFabricator}" CommandParameter="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddFabricator}" CommandParameter="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Редактировать"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding DeleteFabricator}" Background="Transparent" BorderBrush="{x:Null}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spModel">
+                <Label FontSize="15" Content="Модели"/>
+                <Label Foreground="Gray" Content="Справочник моделей"/>
+                    <DataGrid Name="DgModel" ItemsSource="{Binding ModelEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                    <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding IdFabricator, Converter={StaticResource IdToFabricatorConverter}}" ClipboardContentBinding="{x:Null}" Width="*" Header="Производитель" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Model}" ClipboardContentBinding="{x:Null}" Width="*" Header="Модель" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddModel}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                </DataGrid>
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="+ Добавить модель" Command="{Binding AddModel}" CommandParameter ="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                    <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddModel}" CommandParameter ="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                <TextBlock><Run Text="Редактировать"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                            <Button Command="{Binding DeleteModel}" Background="Transparent" BorderBrush="{x:Null}" >
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                <TextBlock><Run Text="Удалить"/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+                <StackPanel x:Name="spWork">
+                    <Label FontSize="15" Content="Перечень услуг"/>
+                    <Label Foreground="Gray" Content="Прейскурант работ и услуг выполняющихся в вашей компании с указанием цены за работу/услугу"/>
+                    <DataGrid Name="DgWork" ItemsSource="{Binding WorkEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Work}" ClipboardContentBinding="{x:Null}" Width="*" Header="Вид работы" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Price}" ClipboardContentBinding="{x:Null}" Width="*" Header="Цена" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddWork}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить работу" Command="{Binding AddWork}" CommandParameter ="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddWork}" CommandParameter ="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Редактировать"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding DeleteWork}" Background="Transparent" BorderBrush="{x:Null}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spMalfunction">
+                    <Label FontSize="15" Content="Неисправности"/>
+                    <Label Foreground="Gray" Content="Перечень типовых неисправностей"/>
+                    <DataGrid Name="DgMalfunction" ItemsSource="{Binding MalfunctionEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Malfunction}" ClipboardContentBinding="{x:Null}" Width="*" Header="Неисправности" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddMalfunction}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить неисправность" Command="{Binding AddMalfunction}" CommandParameter ="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddMalfunction}" CommandParameter ="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Редактировать"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding DeleteMalfunction}" Background="Transparent" BorderBrush="{x:Null}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spAppearance">
+                    <Label FontSize="15" Content="Внешний вид"/>
+                    <Label Foreground="Gray" Content="Список состояния устройств"/>
+                    <DataGrid Name="DgAppearance"  ItemsSource="{Binding AppearanceEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Appearance}" ClipboardContentBinding="{x:Null}" Width="*" Header="Внешний вид" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddAppearance}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить внешний вид" Command="{Binding AddAppearance}" CommandParameter ="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddAppearance}" CommandParameter ="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Редактировать"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding DeleteAppearance}" Background="Transparent" BorderBrush="{x:Null}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spEquipment">
+                    <Label FontSize="15" Content="Комплектация"/>
+                    <Label Foreground="Gray" Content="Справочник элементов комплектации"/>
+                    <DataGrid Name="DgEquipment" ItemsSource="{Binding EquipmentEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding IdTypeDevices, Converter={StaticResource IdToTypeDeviceConverter}}" ClipboardContentBinding="{x:Null}" Width="*" Header="Тип устройства" IsReadOnly="True"/>
+                            <DataGridTextColumn Binding="{Binding Equipment}" ClipboardContentBinding="{x:Null}" Width="*" Header="Комплектация" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddEquipment}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить комплектацию" Command="{Binding AddEquipment}" CommandParameter ="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddEquipment}" CommandParameter ="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Редактировать"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding DeleteEquipment}" Background="Transparent" BorderBrush="{x:Null}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel x:Name="spExecutors">
+                    <Label FontSize="15" Content="Исполнители"/>
+                    <Label Foreground="Gray" Content="Список исполнителей"/>
+                    <DataGrid Name="DgExecutors" ItemsSource="{Binding ExecutorsEntries}" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" AutoGenerateColumns="False" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}" ClipboardContentBinding="{x:Null}" Width="*" Header="Исполнитель" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                        <commands:EventBindings.EventBindings>
+                            <commands:EventBindingCollection>
+                                <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding AddExecutors}" CommandParameter ="true"/>
+                            </commands:EventBindingCollection>
+                        </commands:EventBindings.EventBindings>
+                    </DataGrid>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="+ Добавить исполнителя" Command="{Binding AddExecutors}" CommandParameter ="false" Background="#FF5CB85C" Foreground="White" Padding="5"/>
+                        <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding AddExecutors}" CommandParameter ="true" Background="Transparent" BorderBrush="{x:Null}" Margin="10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Редактировать"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding DeleteExecutors}" Background="Transparent" BorderBrush="{x:Null}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ServiceСenter;component/Assets/delete.png" Height="15" Margin="5,0"/>
+                                    <TextBlock><Run Text="Удалить"/></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</UserControl>

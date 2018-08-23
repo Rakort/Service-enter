@@ -1,0 +1,119 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:ServiceСenter.ViewModel"
+             xmlns:commands="clr-namespace:ServiceСenter.Commands"
+             x:Class="ServiceСenter.View.OrdersView" 
+             mc:Ignorable="d" >
+    <UserControl.DataContext>
+        <viewModel:OrdersViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+        <StackPanel>
+            <Label FontSize="16" Margin="10,0">Заказы</Label>
+            <StackPanel Orientation="Horizontal" Margin="10,0">
+                <Button Content="+ Добавить заказ" Command="{Binding NewOrder}"  VerticalAlignment="Top" Background="#3F9213" Foreground="White" Padding="5" />
+
+                <ToggleButton x:Name="toggleButton" Margin="5,0" Padding="2" ToolTip="Фильтр">
+                    <Image Source="/ServiceСenter;component/Assets/funnel.png" Height="20" Width="20" ToolTip="Фильтр"/>
+                </ToggleButton>
+                <CheckBox IsChecked="{Binding Issued}" Content="Выданные заказы" VerticalAlignment="Center"/>
+
+            </StackPanel>
+            <Expander x:Name="ExpanderFilter" Header="" Margin="-28,0,10,0" VerticalAlignment="Top" IsExpanded="{Binding IsChecked, ElementName=toggleButton}" ExpandDirection="Up" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="37"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label  Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Content="Сатус"/>
+                    <ComboBox x:Name="CbState" ItemsSource="{Binding StateEntries}"  Grid.Column="2" Grid.Row="0"/>
+
+                    <Label  Grid.Column="3" Grid.Row="0" Content="Тип устройства"/>
+                    <ComboBox x:Name="CbType" ItemsSource="{Binding TypeDeviceEntries}"  Grid.Column="4" Grid.Row="0"/>
+
+                    <Label Content="Клиент" Grid.Row="0" Grid.Column="5" />
+                    <ComboBox x:Name="CbClient" ItemsSource="{Binding ClientNameEntries}" Grid.Row="0" Grid.Column="6"/>
+
+                    <Label Grid.Row="1" Grid.Column="1" Content="Производитель"/>
+                    <ComboBox x:Name="CbFabricator" ItemsSource="{Binding FabricatorEntries}" Grid.Row="1" Grid.Column="2"/>
+
+                    <Label Grid.Row="1" Grid.Column="3" Content="Модель"/>
+                    <ComboBox x:Name="CbModel" ItemsSource="{Binding ModelEntries}" Grid.Row="1" Grid.Column="4"/>
+
+                    <Label Grid.Row="1" Grid.Column="5" Content="Исполнитель"/>
+                    <ComboBox x:Name="CbExecutor" ItemsSource="{Binding ExecutorEntries}" Grid.Row="1" Grid.Column="6"/>
+
+                    <Label Grid.Row="2" Grid.Column="1" Content="Дата заказа"/>
+                    <Grid Grid.Row="2" Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="CBDate" SelectionChanged="CBDate_SelectionChanged" Grid.Column="0" Grid.ColumnSpan="2" SelectedIndex="0" VerticalAlignment="Stretch">
+                            <ComboBoxItem Content="За все время"/>
+                            <ComboBoxItem Content="Сегодня"/>
+                            <ComboBoxItem Content="Вчера"/>
+                            <ComboBoxItem Content="С начала недели"/>
+                            <ComboBoxItem Content="С начала месяца"/>
+                            <ComboBoxItem Content="За прошлую неделю"/>
+                            <ComboBoxItem Content="За прошлый месяц"/>
+                            <ComboBoxItem Content="Выбрать даты"/>
+                        </ComboBox>
+                        <TextBlock x:Name="TbDate" Text="За все время" Grid.Column="0" Background="#FFEBEBEB" Padding="4" Margin="1" IsHitTestVisible="False"/>
+                        <StackPanel x:Name="SpDate" Orientation="Horizontal" Grid.Column="0" Visibility="Collapsed">
+                            <DatePicker x:Name="DtStart" Width="95" Padding="2,2,2,0" SelectedDate="{Binding StartDate}" />
+                            <Label FontSize="15" Padding="5,0" VerticalContentAlignment="Center" Content="-"/>
+                            <DatePicker x:Name="DtEnd" Padding="2,2,2,0" Width="95" SelectedDate="{Binding EndDate}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Button x:Name="BtnFilter" Content="Применить" Command="{Binding ApplyFilter}" Grid.Column="4" Grid.Row="2" />
+                    <Button x:Name="BtnCansel"  Content="Очистить фильтры" Click="Button_Click" Grid.Column="6" Grid.Row="2" />
+                </Grid>
+            </Expander>
+            <DataGrid ItemsSource="{Binding OrdersEntries}" HorizontalAlignment="Stretch" Margin="10,0,10,10" VerticalAlignment="Top"  AutoGenerateColumns="False" HorizontalGridLinesBrush="#FFC9C9C9" VerticalGridLinesBrush="#FFC9C9C9" SelectionMode="Single" CanUserDeleteRows="False" CanUserAddRows="False" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Id}" ClipboardContentBinding="{x:Null}" Header="Id" Visibility="Hidden"/>
+                    <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="Номер" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding State}" ClipboardContentBinding="{x:Null}" Header="Статус" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding NameClient}" ClipboardContentBinding="{x:Null}" Header="Имя клиента" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding PhoneClient}" ClipboardContentBinding="{x:Null}" Header="Телефон" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Model}" ClipboardContentBinding="{x:Null}" Header="Устройство" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding DateReceipt, StringFormat=\{0:dd.MM.yyyy\}}" ClipboardContentBinding="{x:Null}" Header="Дата приема" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding AvailabilityDate, StringFormat=\{0:dd.MM.yyyy\}}" ClipboardContentBinding="{x:Null}" Header="Дата готовности" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding NameExecutor}" ClipboardContentBinding="{x:Null}" Header="Мастер" IsReadOnly="True"/>
+                    <DataGridTemplateColumn ClipboardContentBinding="{x:Null}" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding EditOrder}" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}" ToolTip="Редактировать">
+                                    <Image Source="/ServiceСenter;component/Assets/edit.png" Height="15" Width="15"></Image>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <commands:EventBindings.EventBindings>
+                    <commands:EventBindingCollection>
+                        <commands:EventBinding EventName="MouseDoubleClick" Command="{Binding EditOrder}" />
+                    </commands:EventBindingCollection>
+                </commands:EventBindings.EventBindings>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</UserControl>

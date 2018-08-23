@@ -1,0 +1,41 @@
+﻿<Window x:Class="ServiceСenter.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Сервисный центр" Height="600" Width="1000" Icon="/ServiceСenter;component/Assets/repairing-service.png">
+    <Grid Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Background="#BF000000"/>
+        <StackPanel Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <Button Click="Button_Click" Background="{x:Null}" Foreground="#FF707070" BorderBrush="{x:Null}" Margin="5,5,5,0">
+                <Border CornerRadius="5" BorderBrush="#FF979191" BorderThickness="1">
+                    <StackPanel>
+                        <Image Source="/ServiceСenter;component/Assets/list.png" Height="25" Margin="5"/>
+                        <Label Content="Заказы" Foreground="#FF707070" Width="57" Padding="5,0,5,5" />
+                    </StackPanel>
+                </Border>
+            </Button>
+            <Button Click="Button_Click_1" Background="{x:Null}" BorderBrush="{x:Null}" Margin="5">
+                <Border CornerRadius="5" BorderBrush="#FF979191" BorderThickness="1">
+                    <StackPanel>
+                        <Image Source="/ServiceСenter;component/Assets/work.png" Height="20" Margin="5"/>
+                        <Label Content="Словари" Foreground="#FF707070" />
+                    </StackPanel>
+                </Border>
+            </Button>
+            <Button Background="{x:Null}" BorderBrush="{x:Null}" Margin="5" Click="Button_Click_3">
+                <Border CornerRadius="5" BorderBrush="#FF979191" BorderThickness="1">
+                    <StackPanel>
+                        <Image Source="/ServiceСenter;component/Assets/info.png" Height="20" Margin="5"/>
+                        <Label Content="О программе" Foreground="#FF707070" FontSize="9" Margin="-4,0"/>
+                    </StackPanel>
+                </Border>
+            </Button>
+        </StackPanel>
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Name="StackPanel"> </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
